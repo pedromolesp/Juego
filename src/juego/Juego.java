@@ -3,10 +3,15 @@ package juego;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
 import control.Teclado;
+import graficos.Pantalla;
 
 public class Juego extends Canvas implements Runnable {
 
@@ -24,12 +29,24 @@ public class Juego extends Canvas implements Runnable {
 	private static int aps = 0;
 	private static int fps = 0;
 
+	// temporal
+	private static int x = 0;
+	private static int y = 0;
+
+	// fin temp
+
 	private static JFrame ventana;
 	private static Thread thread;
 	private static Teclado teclado;
+	private static Pantalla pantalla;
+
+	private static BufferedImage imagen = new BufferedImage(ANCHO, ALTO, BufferedImage.TYPE_INT_RGB);
+	private static int[] pixeles = ((DataBufferInt) imagen.getRaster().getDataBuffer()).getData();
 
 	private Juego() {
 		setPreferredSize(new Dimension(ANCHO, ALTO));
+
+		pantalla = new Pantalla(ANCHO, ALTO);
 
 		teclado = new Teclado();
 		addKeyListener(teclado);
@@ -71,22 +88,45 @@ public class Juego extends Canvas implements Runnable {
 		teclado.actualizar();
 
 		if (teclado.arriba) {
-			System.out.println("arriba");
+			y++;
 		}
 		if (teclado.abajo) {
-			System.out.println("abajo");
+			y--;
 		}
 		if (teclado.izquierda) {
-			System.out.println("izquierda");
+			x++;
 		}
 		if (teclado.derecha) {
-			System.out.println("derecha");
+			x--;
 		}
 
 		aps++;
 	}
 
 	private void mostrar() {
+		BufferStrategy estrategia = getBufferStrategy();
+
+		if (estrategia == null) {
+			createBufferStrategy(3);
+			return;
+
+		}
+		pantalla.limpiar();
+		pantalla.mostrar(x, y);
+
+		System.arraycopy(pantalla.pixeles, 0, pixeles, 0, pixeles.length);
+
+		// puede ser ralentizador
+		// for (int i = 0; i < pixeles.length; i++) {
+		// pixeles[i] = pantalla.pixeles[i] ;
+		// }
+
+		Graphics g = estrategia.getDrawGraphics();
+
+		g.drawImage(imagen, 0, 0, getWidth(), getHeight(), null);
+		g.dispose();
+
+		estrategia.show();
 		fps++;
 	}
 
