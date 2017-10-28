@@ -9,7 +9,7 @@ public final class Sprite {
 	public int[] pixeles;
 	private final HojaSprites hoja;
 
-	// colección de Sprites
+	// coleccion de sprites
 
 	public static Sprite asfalto = new Sprite(32, 0, 0, HojaSprites.desierto);
 
@@ -28,7 +28,6 @@ public final class Sprite {
 			for (int x = 0; x < lado; x++) {
 				pixeles[x + y * lado] = hoja.pixeles[(x + this.x) + (y + this.y) * hoja.obtenAncho()];
 			}
-
 		}
 	}
 }

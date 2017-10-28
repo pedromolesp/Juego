@@ -15,10 +15,8 @@ import graficos.Pantalla;
 
 public class Juego extends Canvas implements Runnable {
 
-	/**
-	 * Identificador de versión
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1l;
+
 	private static final int ANCHO = 800;
 	private static final int ALTO = 600;
 
@@ -29,11 +27,8 @@ public class Juego extends Canvas implements Runnable {
 	private static int aps = 0;
 	private static int fps = 0;
 
-	// temporal
 	private static int x = 0;
 	private static int y = 0;
-
-	// fin temp
 
 	private static JFrame ventana;
 	private static Thread thread;
@@ -51,7 +46,7 @@ public class Juego extends Canvas implements Runnable {
 		teclado = new Teclado();
 		addKeyListener(teclado);
 
-		ventana = new JFrame();
+		ventana = new JFrame(NOMBRE);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setResizable(false);
 		ventana.setLayout(new BorderLayout());
@@ -59,19 +54,19 @@ public class Juego extends Canvas implements Runnable {
 		ventana.pack();
 		ventana.setLocationRelativeTo(null);
 		ventana.setVisible(true);
-
 	}
 
 	public static void main(String[] args) {
+
 		Juego juego = new Juego();
 		juego.iniciar();
+
 	}
 
 	private synchronized void iniciar() {
 		enFuncionamiento = true;
 		thread = new Thread(this, "Graficos");
 		thread.start();
-
 	}
 
 	private synchronized void detener() {
@@ -99,8 +94,8 @@ public class Juego extends Canvas implements Runnable {
 		if (teclado.derecha) {
 			x--;
 		}
-
 		aps++;
+
 	}
 
 	private void mostrar() {
@@ -109,16 +104,14 @@ public class Juego extends Canvas implements Runnable {
 		if (estrategia == null) {
 			createBufferStrategy(3);
 			return;
-
 		}
 		pantalla.limpiar();
 		pantalla.mostrar(x, y);
 
 		System.arraycopy(pantalla.pixeles, 0, pixeles, 0, pixeles.length);
 
-		// puede ser ralentizador
-		// for (int i = 0; i < pixeles.length; i++) {
-		// pixeles[i] = pantalla.pixeles[i] ;
+		// for(int i = 0; i < pixeles.length; i++){
+		// pixeles[i] = pantalla.pixeles[i];
 		// }
 
 		Graphics g = estrategia.getDrawGraphics();
@@ -127,9 +120,11 @@ public class Juego extends Canvas implements Runnable {
 		g.dispose();
 
 		estrategia.show();
+
 		fps++;
 	}
 
+	@Override
 	public void run() {
 		final int NS_POR_SEGUNDO = 1000000000;
 		final byte APS_OBJETIVO = 60;
@@ -143,7 +138,6 @@ public class Juego extends Canvas implements Runnable {
 
 		requestFocus();
 
-		// System.out.println("El thread 2 se está ejecutando");
 		while (enFuncionamiento) {
 			final long inicioBucle = System.nanoTime();
 
@@ -155,21 +149,19 @@ public class Juego extends Canvas implements Runnable {
 			while (delta >= 1) {
 				actualizar();
 				delta--;
+
 			}
+
 			mostrar();
+
 			if (System.nanoTime() - referenciaContador > NS_POR_SEGUNDO) {
-				ventana.setTitle(NOMBRE + " || APS: " + aps + " || FPS: " + fps);
+				ventana.setTitle(NOMBRE + "|| APS: " + aps + "|| FPS: " + fps);
 				aps = 0;
 				fps = 0;
 				referenciaContador = System.nanoTime();
 			}
 		}
+
 	}
-	/*
-	 * 1 Primer día del Juego video 4 terminado, empezar 5
-	 */
-	/*
-	 * 2 Segundo día del Juego video 8 terminado, empezar 9
-	 */
 
 }
