@@ -2,12 +2,14 @@ package juego;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import control.Teclado;
@@ -15,7 +17,7 @@ import graficos.Pantalla;
 
 public class Juego extends Canvas implements Runnable {
 
-	private static final long serialVersionUID = 1l;
+	private static final long serialVersionUID = 1L;
 
 	private static final int ANCHO = 800;
 	private static final int ALTO = 600;
@@ -37,6 +39,7 @@ public class Juego extends Canvas implements Runnable {
 
 	private static BufferedImage imagen = new BufferedImage(ANCHO, ALTO, BufferedImage.TYPE_INT_RGB);
 	private static int[] pixeles = ((DataBufferInt) imagen.getRaster().getDataBuffer()).getData();
+	private static final ImageIcon icono = new ImageIcon(Juego.class.getResource("/icono/icono2.png"));
 
 	private Juego() {
 		setPreferredSize(new Dimension(ANCHO, ALTO));
@@ -49,6 +52,7 @@ public class Juego extends Canvas implements Runnable {
 		ventana = new JFrame(NOMBRE);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setResizable(false);
+		ventana.setIconImage(icono.getImage());
 		ventana.setLayout(new BorderLayout());
 		ventana.add(this, BorderLayout.CENTER);
 		ventana.pack();
@@ -117,6 +121,8 @@ public class Juego extends Canvas implements Runnable {
 		Graphics g = estrategia.getDrawGraphics();
 
 		g.drawImage(imagen, 0, 0, getWidth(), getHeight(), null);
+		g.setColor(Color.white);
+		g.fillRect(ANCHO / 2 - 16, ALTO / 2 - 16, 32, 32);
 		g.dispose();
 
 		estrategia.show();

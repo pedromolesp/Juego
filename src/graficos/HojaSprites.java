@@ -13,7 +13,7 @@ public class HojaSprites {
 
 	// colección de hojas de sprites
 
-	public static HojaSprites desierto = new HojaSprites("/texturas/desierto.png", 320, 320);
+	public static final HojaSprites DESIERTO = new HojaSprites("/texturas/desierto.png", 320, 320);
 
 	// fin de colección
 
@@ -38,4 +38,3 @@ public class HojaSprites {
 		return ancho;
 	}
 }
-// video6 acabado
